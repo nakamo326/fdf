@@ -14,4 +14,25 @@
 # include "./libft/libft.h"
 # include "./minilibx-linux/mlx.h"
 
+# define WIN_W 1280
+# define WIN_H 720
+# define KEY_ESC 65307
+
+typedef struct	s_img {
+	void	*ptr;
+	char	*addr;
+	int		bpp;
+	int		len;
+	int		endian;
+	int		w;
+	int		h;
+}	t_img;
+
+typedef struct	s_fdf
+{
+	void	*mlx;
+	void	*win;
+	t_img	img;
+}	t_fdf;
+
 #endif

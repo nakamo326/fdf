@@ -1,18 +1,38 @@
 #include "fdf.h"
 
-int main(int argc, char const *argv[])
+int	loop(t_fdf *f)
 {
-	void	*mlx;
-	void	*mlx_win;
-	//if (argc != 2)
-	//	return 1;
+	mlx_put_image_to_window(f->mlx, f->win, f->img.ptr, 0, 0);
+	mlx_do_sync(f->mlx);
+	return (0);
+}
 
-	(void)mlx;
-	(void)mlx_win;
+int	quit_game(void *param)
+{
+	t_fdf	*f;
+
+	f = (t_fdf *)param;
+	mlx_destroy_image(f->mlx, f->img.ptr);
+	mlx_destroy_window(f->mlx, f->win);
+	mlx_destroy_display(f->mlx);
+	free(f->mlx);
+	ft_putstr_fd("The fdf ended successfully!\n", 1);
+	exit(EXIT_SUCCESS);
+}
+
+int	main(int argc, char const *argv[])
+{
+	t_fdf	f;
+
 	(void)argc;
 	(void)argv;
-	mlx = mlx_init();
-	mlx_win = mlx_new_window(mlx, 1280, 720, "fdf");
-	while(1);
-	return 0;
+	f.mlx = mlx_init();
+	f.win = mlx_new_window(f.mlx, WIN_W, WIN_H, "fdf");
+	f.img.ptr = mlx_new_image(f.mlx, WIN_W, WIN_H);
+	f.img.addr = mlx_get_data_addr(
+			f.img.ptr, &f.img.bpp, &f.img.len, &f.img.endian);
+	mlx_hook(f.win, 33, StructureNotifyMask, quit_game, &f);
+	mlx_loop_hook(f.mlx, loop, &f);
+	mlx_loop(f.mlx);
+	return (EXIT_SUCCESS);
 }
