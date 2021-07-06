@@ -1,15 +1,16 @@
-NAME =
+NAME = fdf
 
 CFLAGS = -Wall -Wextra -Werror
 INCLUDES = -I./includes -I.
 
 LIBFT = ./libft/libft.a
+MINILIBX = ./minilibx-linux/libmlx.a
 
-SRCFILE =
+SRCFILE = srcs/main.c
 
 
-SRCDIRS = $(dir $(SRCFILE))
 OBJDIR = ./obj
+SRCDIRS = $(dir $(SRCFILE))
 BINDIRS = $(addprefix $(OBJDIR)/, $(SRCDIRS))
 OBJECTS = $(addprefix $(OBJDIR)/, $(SRCFILE:.c=.o))
 TEST = $(notdir $(basename $(SRCFILE)))
@@ -19,12 +20,11 @@ all: $(NAME)
 $(LIBFT):
 	$(MAKE) bonus -C ./libft
 
-minilibx:
-	$(MAKE) do_configure -C ./minilibx-linux
+$(MINILIBX):
+	$(MAKE) -C ./minilibx-linux
 
-$(NAME): $(OBJECTS) $(LIBFT) minilibx
-	gcc -g $(CFLAGS) $^ $(INCLUDES) -L./minilibx-linux \
-	-lft -lmlx -lXext -lX11 -lm -o $@
+$(NAME): $(OBJECTS) $(LIBFT) $(MINILIBX)
+	gcc -g $(CFLAGS) $^ $(INCLUDES) -lXext -lX11 -lm -o $@
 
 $(OBJDIR)/%.o: %.c
 	@mkdir -p $(BINDIRS)
@@ -36,14 +36,15 @@ $(TEST): $(OBJECTS) $(LIBFT)
 
 clean:
 	$(MAKE) clean -C ./libft
+	$(MAKE) clean -C ./minilibx-linux
 	$(RM) $(OBJECTS)
 	$(RM) -rf $(OBJDIR)
 
 fclean:
 	$(MAKE) fclean -C ./libft
+	$(MAKE) clean -C ./minilibx-linux
 	$(RM) $(OBJECTS) $(NAME)
 	$(RM) -rf $(OBJDIR)
-	$(RM) -rf test test.dSYM
 
 re: fclean all
 
