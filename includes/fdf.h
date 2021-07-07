@@ -28,6 +28,17 @@ typedef struct	s_img {
 	int		h;
 }	t_img;
 
+typedef struct	s_line
+{
+	int		x0;
+	int		y0;
+	int		x1;
+	int		y1;
+	int		delta_x;
+	int		delta_y;
+	bool	steep;
+}	t_line;
+
 typedef struct	s_fdf
 {
 	void	*mlx;
