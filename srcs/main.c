@@ -1,12 +1,5 @@
 #include "fdf.h"
 
-int	loop(t_fdf *f)
-{
-	mlx_put_image_to_window(f->mlx, f->win, f->img.ptr, 0, 0);
-	mlx_do_sync(f->mlx);
-	return (0);
-}
-
 int	quit_game(void *param)
 {
 	t_fdf	*f;
@@ -20,6 +13,21 @@ int	quit_game(void *param)
 	exit(EXIT_SUCCESS);
 }
 
+int		keypress_hook(int keycode, t_fdf *f)
+{
+	if (keycode == KEY_ESC)
+		quit_game((void *)f);
+	return (SUCCESS);
+}
+
+int	loop(t_fdf *f)
+{
+	render_map(f);
+	mlx_put_image_to_window(f->mlx, f->win, f->img.ptr, 0, 0);
+	mlx_do_sync(f->mlx);
+	return (SUCCESS);
+}
+
 int	main(int argc, char const *argv[])
 {
 	t_fdf	f;
@@ -31,6 +39,7 @@ int	main(int argc, char const *argv[])
 	f.img.ptr = mlx_new_image(f.mlx, WIN_W, WIN_H);
 	f.img.addr = mlx_get_data_addr(
 			f.img.ptr, &f.img.bpp, &f.img.len, &f.img.endian);
+	mlx_hook(f.win, KeyPress, KeyPressMask, keypress_hook, &f);
 	mlx_hook(f.win, 33, StructureNotifyMask, quit_game, &f);
 	mlx_loop_hook(f.mlx, loop, &f);
 	mlx_loop(f.mlx);

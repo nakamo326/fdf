@@ -6,7 +6,11 @@ INCLUDES = -I./includes -I.
 LIBFT = ./libft/libft.a
 MINILIBX = ./minilibx-linux/libmlx.a
 
-SRCFILE = srcs/main.c
+SRCFILE =	srcs/render/render_map.c \
+			srcs/utils/draw_line.c \
+			srcs/utils/get_next_line.c \
+			srcs/utils/render_utils.c \
+			srcs/main.c
 
 
 OBJDIR = ./obj
